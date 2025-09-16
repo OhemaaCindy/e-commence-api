@@ -6,7 +6,7 @@ import orderRoutes from "./order.routes";
 
 const router = Router();
 
-router.use("/user", userRoutes);
+router.use("/users", userRoutes);
 router.use("/categories", categoryRoutes);
 router.use("/products", productRoutes);
 router.use("/orders", orderRoutes);

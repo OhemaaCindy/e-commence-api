@@ -18,6 +18,7 @@ export function authenticate(
   try {
     const payload = verifyToken(token);
     req.user = { id: payload.userId, role: payload.role };
+    console.log("🚀 ~ authenticate ~ req.user:", req.user);
     next();
   } catch (err) {
     return res.status(401).json({ message: "Invalid token" });

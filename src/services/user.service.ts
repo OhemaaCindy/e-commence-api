@@ -65,7 +65,9 @@ export async function getAllUsers() {
   }));
 }
 
-export async function getUserById(id: string) {
+export async function getUserById(id: string | null) {
+  if (typeof id !== "string") return null;
+
   const user = await prisma.user.findUnique({ where: { id } });
   if (!user) return null;
   return {
