@@ -57,3 +57,25 @@ export async function payOrder(id: string) {
     data: { isPaid: true, paidAt: new Date() },
   });
 }
+
+export async function createAddress(
+  userId: string,
+  addressData: ShippingAddressInput
+) {
+  return prisma.address.create({
+    data: {
+      address: addressData.address,
+      city: addressData.city,
+      country: addressData.country,
+      postalCode: addressData.postalCode,
+      userId,
+    },
+  });
+}
+
+export async function listAddress(userId: string) {
+  return prisma.address.findMany({
+    where: { userId },
+    orderBy: { createdAt: "desc" },
+  });
+}

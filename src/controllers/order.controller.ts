@@ -4,6 +4,8 @@ import {
   listOrders,
   getOrder,
   payOrder,
+  listAddress,
+  createAddress,
 } from "../services/order.service";
 
 export async function create(req: Request, res: Response) {
@@ -38,4 +40,24 @@ export async function pay(req: Request, res: Response) {
   } catch (e: any) {
     res.status(400).json({ message: e.message || "Pay order failed" });
   }
+}
+
+export interface AuthRequest extends Request {
+  user?: { id: string; role: "USER" | "ADMIN" };
+}
+// address
+export async function addAddress(req: AuthRequest, res: Response) {
+  const userId = req?.user?.id;
+  try {
+    const address = await createAddress(userId!, req.body);
+    res.status(201).json(address);
+  } catch (e: any) {
+    res.status(400).json({ message: e.message || "Create address failed" });
+  }
+}
+
+export async function getAllAddress(req: AuthRequest, res: Response) {
+  const userId = req?.user?.id;
+  const address = await listAddress(userId!);
+  res.json(address);
 }
