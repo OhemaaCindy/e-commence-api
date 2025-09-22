@@ -1,0 +1,753 @@
+{
+	"info": {
+		"_postman_id": "9aa48301-469f-4920-ae15-355b526ec2a9",
+		"name": "simple-ecommerce",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16483360"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{admin-name}}\",\r\n    \"email\": \"{{admin-email}}\",\r\n    \"password\": \"{{admin-password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();\r",
+									"console.log(res);\r",
+									"// console.log(res.user.id);\r",
+									"pm.collectionVariables.set(\"token\", res.token)\r",
+									"pm.collectionVariables.set(\"userId\", res.user.id)\r",
+									"\r",
+									"// const refreshToken = pm.response.headers.get(\"x-refresh-token\");\r",
+									"\r",
+									"// if (refreshToken) {\r",
+									"//   pm.collectionVariables.set(\"refreshToken\", refreshToken); // or pm.globals.set(...)\r",
+									"//   console.log(\"Refresh token saved:\", refreshToken);\r",
+									"// } else {\r",
+									"//   console.warn(\"x-refresh-token header not found.\");\r",
+									"// }\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{admin-email}}\",\r\n    \"password\": \"{{admin-password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "categories",
+			"item": [
+				{
+					"name": "Create Category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();\r",
+									"pm.collectionVariables.set(\"categoryId\", res.id)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Electronics",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/DELL/Downloads/MIcheal Essuman's ticket _ Ghana Digital & Innovation Week 2025.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/categories",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Category",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Electronics",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/DELL/Downloads/cashlet-app-logo.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/categories/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{categoryId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/categories/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{categoryId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Categories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();\r",
+									"pm.collectionVariables.set(\"categoryId\", res[0].id)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/categories",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DEL Category",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/categories/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{categoryId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "products",
+			"item": [
+				{
+					"name": "Create Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();\r",
+									"pm.collectionVariables.set(\"productId\", res.id)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "iPhone 14",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Latest iPhone model",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "999",
+									"type": "text"
+								},
+								{
+									"key": "quantity",
+									"value": "50",
+									"type": "text"
+								},
+								{
+									"key": "brand",
+									"value": "Apple",
+									"type": "text"
+								},
+								{
+									"key": "categoryId",
+									"value": "{{categoryId}}",
+									"type": "text"
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"src": [
+										"/C:/Users/DELL/OneDrive - Global Icons/Pictures/Screenshots/Screenshot 2025-09-13 171427.png",
+										"/C:/Users/DELL/OneDrive - Global Icons/Pictures/Screenshots/Screenshot 2025-09-21 123427.png",
+										"/C:/Users/DELL/OneDrive - Global Icons/Pictures/Screenshots/Screenshot 2025-09-20 103907.png"
+									]
+								},
+								{
+									"key": "rating",
+									"value": "5",
+									"type": "text"
+								},
+								{
+									"key": "size",
+									"value": "xl",
+									"type": "text"
+								},
+								{
+									"key": "color",
+									"value": "red",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();\r",
+									"pm.collectionVariables.set(\"productId\", res.id)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "iPhone 14",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Latest iPhone model",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "999",
+									"type": "text"
+								},
+								{
+									"key": "quantity",
+									"value": "50",
+									"type": "text"
+								},
+								{
+									"key": "brand",
+									"value": "Apple",
+									"type": "text"
+								},
+								{
+									"key": "categoryId",
+									"value": "{{categoryId}}",
+									"type": "text"
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"src": [
+										"/C:/Users/DELL/OneDrive - Global Icons/Pictures/Screenshots/Screenshot 2025-09-13 171427.png",
+										"/C:/Users/DELL/OneDrive - Global Icons/Pictures/Screenshots/Screenshot 2025-09-21 123427.png",
+										"/C:/Users/DELL/OneDrive - Global Icons/Pictures/Screenshots/Screenshot 2025-09-20 103907.png"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{productId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET all products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();\r",
+									"pm.collectionVariables.set(\"productId\", res[0].id)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"newuser@gmail.com\",\r\n    \"password\": \"password\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET single product",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"newuser@gmail.com\",\r\n    \"password\": \"password\"\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{productId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET single product Copy",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{productId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "orders",
+			"item": [
+				{
+					"name": "CREATE order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();\r",
+									"pm.collectionVariables.set(\"productId\", res.id)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"paymentMethod\" : \"stripe\",\r\n    \"shippingAddress\" : {\r\n        \"address\": \"rrr\",\r\n        \"city\": \"ddeedt\",\r\n        \"postalCode\" : \"233\",\r\n        \"country\": \"NY\"\r\n    },\r\n    \"orderItems\" : [\r\n        {\r\n        \"name\": \"fresh-hhhjd\",\r\n        \"qty\": 5,\r\n        \"image\": \"dd\",\r\n        \"price\": 500,\r\n        \"product\": \"{{productId}}\"\r\n    }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pay order",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"callback_url\": \"http:localhost:3000\",\r\n    \"orderId\": \"{{orderId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/orders/pay",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders",
+								"pay"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET orders",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();\r",
+									"pm.collectionVariables.set(\"orderId\", res[0].id)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET single order",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/orders/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{orderId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:4000/api"
+		},
+		{
+			"key": "admin-email",
+			"value": "admin@gmail.com"
+		},
+		{
+			"key": "admin-password",
+			"value": "password"
+		},
+		{
+			"key": "user-email",
+			"value": "user@gmail.com",
+			"type": "string"
+		},
+		{
+			"key": "user-password",
+			"value": "password",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "categoryId",
+			"value": ""
+		},
+		{
+			"key": "productId",
+			"value": ""
+		},
+		{
+			"key": "orderId",
+			"value": ""
+		}
+	]
+}

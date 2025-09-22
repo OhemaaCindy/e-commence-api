@@ -4,26 +4,42 @@ import {
   update,
   getOne,
   list,
+  remove,
+  deleteImage,
 } from "../controllers/product.controller";
 import { authenticate, authorize } from "../middlewares/auth";
-import multer from "multer";
-import path from "path";
-import os from "os";
-import { uploadImage } from "../controllers/product.controller";
+
+import { upload } from "../middlewares/multer-upload.middleware";
 
 const router = Router();
-const upload = multer({ dest: path.join(os.tmpdir(), "uploads") });
 
-router.post("/", authenticate, authorize(["ADMIN"]), create);
-router.put("/:id", authenticate, authorize(["ADMIN"]), update);
-router.get("/:id", getOne);
-router.get("/", list);
+// Create product with multiple images (1-5 images required)
 router.post(
-  "/upload",
+  "/",
   authenticate,
   authorize(["ADMIN"]),
-  upload.single("image"),
-  uploadImage
+  upload.array("images", 5), // Accept up to 5 images
+  create
+);
+
+// Update product with optional new images
+router.put(
+  "/:id",
+  authenticate,
+  authorize(["ADMIN"]),
+  upload.array("images", 5),
+  update
+);
+
+router.get("/:id", getOne);
+router.get("/", list);
+
+router.delete("/:id", authenticate, authorize(["ADMIN"]), remove);
+router.delete(
+  "/:productId/images/:imageId",
+  authenticate,
+  authorize(["ADMIN"]),
+  deleteImage
 );
 
 export default router;
