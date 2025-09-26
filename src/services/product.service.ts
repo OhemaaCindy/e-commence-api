@@ -188,8 +188,11 @@ export async function getProductById(id: string) {
   });
 }
 
-export async function getAllProducts() {
+export async function getAllProducts(categoryId?: string) {
+  const whereClause = categoryId ? { categoryId } : {};
+
   return prisma.product.findMany({
+    where: whereClause,
     include: {
       images: true,
       category: true,

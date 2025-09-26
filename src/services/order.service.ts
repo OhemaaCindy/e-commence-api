@@ -19,6 +19,7 @@ interface CreateOrderInput {
   orderItems: OrderItemInput[];
   shippingAddress: ShippingAddressInput;
   paymentMethod: string;
+  userId: string;
 }
 
 export async function createOrder(input: CreateOrderInput) {
@@ -39,6 +40,7 @@ export async function createOrder(input: CreateOrderInput) {
       shippingAddress: input.shippingAddress,
       paymentMethod: input.paymentMethod,
       totalPrice,
+      userId: input.userId,
     },
   });
 }
@@ -58,23 +60,8 @@ export async function payOrder(id: string) {
   });
 }
 
-export async function createAddress(
-  userId: string,
-  addressData: ShippingAddressInput
-) {
-  return prisma.address.create({
-    data: {
-      address: addressData.address,
-      city: addressData.city,
-      country: addressData.country,
-      postalCode: addressData.postalCode,
-      userId,
-    },
-  });
-}
-
-export async function listAddress(userId: string) {
-  return prisma.address.findMany({
+export async function getUserOrders(userId: string) {
+  return prisma.order.findMany({
     where: { userId },
     orderBy: { createdAt: "desc" },
   });

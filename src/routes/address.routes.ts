@@ -1,10 +1,9 @@
 import { Router } from "express";
-import { addAddress, getAllAddress } from "../controllers/order.controller";
+import { addAddress, getAllAddress } from "../controllers/address.controller";
 import { authenticate, authorize } from "../middlewares/auth";
 
 const router = Router();
 
-// address
 router.post("/", authenticate, addAddress);
 router.get("/", authenticate, getAllAddress);
 

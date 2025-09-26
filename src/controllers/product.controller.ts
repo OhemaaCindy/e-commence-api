@@ -12,8 +12,6 @@ export async function create(req: Request, res: Response) {
   try {
     const productData = req.body;
     const imageFiles = req.files as Express.Multer.File[];
-    console.log("🚀🚀 ~ create ~ productData:", productData);
-    console.log("🔥🔥 ~ create ~ imageFiles:", imageFiles);
 
     // Validate that at least 1 image is provided
     if (!imageFiles || imageFiles.length === 0) {
@@ -31,9 +29,9 @@ export async function create(req: Request, res: Response) {
     // Convert string values to appropriate types
     const processedData = {
       ...productData,
-      price: parseFloat(productData.price) || 0,
-      quantity: parseInt(productData.quantity) || 0,
-      discount: parseInt(productData.discount) || 0,
+      price: parseFloat(productData.price),
+      quantity: parseInt(productData.quantity),
+      discount: parseInt(productData.discount),
     };
 
     // Validate the converted values
@@ -49,7 +47,6 @@ export async function create(req: Request, res: Response) {
         .json({ message: "Quantity must be a valid non-negative number" });
     }
 
-    console.log("🚀🚀 ~ create ~ processedData:", processedData);
     const product = await createProduct(processedData, imageFiles);
     res.status(201).json(product);
   } catch (e: any) {
@@ -123,9 +120,10 @@ export async function getOne(req: Request, res: Response) {
   }
 }
 
-export async function list(_req: Request, res: Response) {
+export async function list(req: Request, res: Response) {
   try {
-    const products = await getAllProducts();
+    const { categoryId } = req.query;
+    const products = await getAllProducts(categoryId as string);
     res.json(products);
   } catch (e: any) {
     res.status(500).json({ message: e.message || "Get products failed" });

@@ -5,8 +5,9 @@
   "type": "commonjs",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "rimraf dist && npm typecheck && npm lint && tsc && tsc-alias && ls dist",
+    "build": "rimraf dist && npm run typecheck && tsc",
     "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma db push",
     "seed": "prisma db seed"

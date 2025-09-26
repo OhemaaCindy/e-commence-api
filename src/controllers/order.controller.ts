@@ -4,13 +4,16 @@ import {
   listOrders,
   getOrder,
   payOrder,
-  listAddress,
-  createAddress,
+  getUserOrders,
 } from "../services/order.service";
 
 export async function create(req: Request, res: Response) {
   try {
-    const order = await createOrder(req.body);
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+    const order = await createOrder({ ...req.body, userId });
     res.status(201).json(order);
   } catch (e: any) {
     res.status(400).json({ message: e.message || "Create order failed" });
@@ -42,22 +45,15 @@ export async function pay(req: Request, res: Response) {
   }
 }
 
-export interface AuthRequest extends Request {
-  user?: { id: string; role: "USER" | "ADMIN" };
-}
-// address
-export async function addAddress(req: AuthRequest, res: Response) {
-  const userId = req?.user?.id;
+export async function getUserOrdersList(req: Request, res: Response) {
   try {
-    const address = await createAddress(userId!, req.body);
-    res.status(201).json(address);
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+    const orders = await getUserOrders(userId);
+    res.json(orders);
   } catch (e: any) {
-    res.status(400).json({ message: e.message || "Create address failed" });
+    res.status(400).json({ message: e.message || "Get user orders failed" });
   }
-}
-
-export async function getAllAddress(req: AuthRequest, res: Response) {
-  const userId = req?.user?.id;
-  const address = await listAddress(userId!);
-  res.json(address);
 }

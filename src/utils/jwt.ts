@@ -8,7 +8,7 @@ export interface JwtPayloadShape {
 
 export function signToken(
   payload: JwtPayloadShape,
-  expiresIn: string = "7d"
+  expiresIn: "7d" | "15min" = "7d"
 ): string {
   return jwt.sign(payload, env.jwtSecret, { expiresIn });
 }
