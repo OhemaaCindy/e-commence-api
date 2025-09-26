@@ -3,6 +3,75 @@ import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
+// Utility: sample without replacement
+function sampleWithoutReplacement<T>(source: T[], count: number): T[] {
+  const copy = source.slice();
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = copy[i]!;
+    copy[i] = copy[j]!;
+    copy[j] = temp;
+  }
+  return copy.slice(0, Math.max(0, Math.min(count, copy.length)));
+}
+
+// Utility: build a fixed-size list of images from a pool, cycling if needed
+function buildImagesFromPool(pool: string[], count: number): string[] {
+  if (pool.length === 0 || count <= 0) return [];
+  const shuffled = sampleWithoutReplacement(pool, pool.length);
+  const result: string[] = [];
+  for (let k = 0; k < count; k++) {
+    result.push(shuffled[k % shuffled.length]!);
+  }
+  return result;
+}
+
+// Category-specific image pools to ensure visual relevance
+const categoryImageUrls: Record<string, string[]> = {
+  Dresses: [
+    "https://images.unsplash.com/photo-1520975940469-923f9fdd2e6a?w=800&h=1000&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&h=1000&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=1000&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1520975922284-7bcd4633b9a0?w=800&h=1000&fit=crop&auto=format",
+    "https://images.pexels.com/photos/6311573/pexels-photo-6311573.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000&fit=crop",
+  ],
+  "Tops & Blouses": [
+    "https://images.unsplash.com/photo-1516826957135-700dedea698c?w=800&h=1000&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1515378960530-7c0da6231fb1?w=800&h=1000&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&h=1000&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1503342452485-86ff0a4c7e88?w=800&h=1000&fit=crop&auto=format",
+    "https://images.pexels.com/photos/6311394/pexels-photo-6311394.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000&fit=crop",
+  ],
+  Bottoms: [
+    "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=1000&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1503342452485-86ff0a4c7e88?w=800&h=1000&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=800&h=1000&fit=crop&auto=format",
+    "https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000&fit=crop",
+    "https://images.pexels.com/photos/6311391/pexels-photo-6311391.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000&fit=crop",
+  ],
+  "Shoes & Heels": [
+    "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=800&h=1000&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1520975693416-35a0f871b3f9?w=800&h=1000&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=1000&fit=crop&auto=format",
+    "https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000&fit=crop",
+    "https://images.pexels.com/photos/769108/pexels-photo-769108.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000&fit=crop",
+  ],
+  Accessories: [
+    "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=800&h=1000&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=1000&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1516826957135-700dedea698c?w=800&h=1000&fit=crop&auto=format",
+    "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000&fit=crop",
+    "https://images.pexels.com/photos/3774930/pexels-photo-3774930.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000&fit=crop",
+  ],
+  Outerwear: [
+    "https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=800&h=1000&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1516826957135-700dedea698c?w=800&h=1000&fit=crop&auto=format",
+    "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=1000&fit=crop&auto=format",
+    "https://images.pexels.com/photos/6311391/pexels-photo-6311391.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000&fit=crop",
+    "https://images.pexels.com/photos/6311394/pexels-photo-6311394.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000&fit=crop",
+  ],
+};
+
 // Fashion categories with images
 const categories = [
   {
@@ -782,15 +851,20 @@ async function main() {
         },
       });
 
-      // Create product images (2-4 images per product)
-      const imageCount = Math.floor(Math.random() * 3) + 2;
+      // Create exactly 4 product images strictly from category pool
+      const desiredImageCount = 4;
+      const categoryPool = categoryImageUrls[category.name] || [];
+      if (categoryPool.length === 0) {
+        throw new Error(`No images configured for category: ${category.name}`);
+      }
+      const selectedImageUrls = buildImagesFromPool(
+        categoryPool,
+        desiredImageCount
+      );
       const productImages: any[] = [];
 
-      for (let j = 0; j < imageCount; j++) {
-        // Use Unsplash images with different parameters for variety
-        const imageUrl = `https://images.unsplash.com/photo-${Math.random()
-          .toString(36)
-          .substring(2, 15)}?w=800&h=1000&fit=crop&auto=format`;
+      for (let j = 0; j < selectedImageUrls.length; j++) {
+        const imageUrl = selectedImageUrls[j]!;
         const publicId = `product-${product.id}-${j}`;
 
         const productImage = await prisma.productImage.create({
