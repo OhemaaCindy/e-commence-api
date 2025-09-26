@@ -89,7 +89,7 @@ const categories = [
   {
     name: "Bottoms",
     imageUrl:
-      "https://images.unsplash.com/photo-1506629905241-8c5b4e7e8b8f?w=500&h=500&fit=crop",
+      "https://images.pexels.com/photos/52518/jeans-pants-blue-shop-52518.jpeg",
     publicId: "bottoms-category",
   },
   {
@@ -101,7 +101,7 @@ const categories = [
   {
     name: "Accessories",
     imageUrl:
-      "https://images.unsplash.com/photo-1506629905241-8c5b4e7e8b8f?w=500&h=500&fit=crop",
+      "https://images.pexels.com/photos/325527/pexels-photo-325527.jpeg",
     publicId: "accessories-category",
   },
   {
