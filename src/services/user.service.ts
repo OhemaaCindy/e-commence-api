@@ -63,8 +63,18 @@ export async function updateUser(
 }
 
 export async function getAllUsers() {
+  interface User {
+  id: string;
+  username: string;
+  email: string;
+  role: string;
+  password: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
   const users = await prisma.user.findMany({ orderBy: { createdAt: "desc" } });
-  return users.map((u) => ({
+  return users.map((u:User) => ({
     id: u.id,
     username: u.username,
     email: u.email,
