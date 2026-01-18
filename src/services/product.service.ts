@@ -13,6 +13,15 @@ interface ProductInput {
   brand?: string;
 }
 
+interface ProductImage {
+  id: string;
+  imageUrl: string;
+  publicId: string;
+  productId: string;
+  createdAt: Date;
+  updatedAt?: Date;
+}
+
 export async function createProduct(
   input: ProductInput,
   imageFiles: Express.Multer.File[]
@@ -163,9 +172,12 @@ export async function deleteProduct(id: string) {
   }
 
   // Delete all images from Cloudinary
-  const deletePromises = product.images.map((image) =>
-    deleteFromCloudinary(image.publicId)
-  );
+  // const deletePromises = product.images.map((image) =>
+  //   deleteFromCloudinary(image.publicId)
+  // );
+  const deletePromises = product.images.map((image: ProductImage) =>
+  deleteFromCloudinary(image.publicId)
+);
 
   try {
     await Promise.all(deletePromises);
