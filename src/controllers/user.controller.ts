@@ -20,7 +20,7 @@ export async function register(req: Request, res: Response) {
 export async function login(req: Request, res: Response) {
   try {
     const { email, password } = req.body;
-    console.log(`🚀 ~ login ~ { email, password }:`, { email, password });
+    console.log(`🚀 ~ login ~ { email, password }:`, { email, password })
     const result = await loginUser(email, password);
     res.json(result);
   } catch (e: any) {

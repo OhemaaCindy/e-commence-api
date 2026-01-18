@@ -26,9 +26,12 @@ export async function registerUser(
 }
 
 export async function loginUser(email: string, password: string) {
-  const user = await prisma.user.findUnique({ where: { email } });
+  try{
+    const user = await prisma.user.findUnique({ where: { email } });
+    console.log("🚀 ~ loginUser ~ user:", user)
   if (!user) throw new Error("Invalid credentials");
   const ok = await bcrypt.compare(password, user.password);
+  console.log("🚀 ~ loginUser ~ ok:", ok)
   if (!ok) throw new Error("Invalid credentials");
   const token = signToken({ userId: user.id, role: user.role });
   return {
@@ -40,6 +43,10 @@ export async function loginUser(email: string, password: string) {
     },
     token,
   };
+  }catch(error){
+  console.log("🚀 ~ loginUser ~ error:", error)
+throw error
+  }
 }
 
 export async function updateUser(
