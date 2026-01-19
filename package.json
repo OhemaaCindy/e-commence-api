@@ -5,10 +5,11 @@
   "type": "commonjs",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "rimraf dist && npm run typecheck && tsc",
+   
+     "build": "prisma generate && rimraf dist && npm run typecheck && tsc",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit",
-    "prisma:generate": "prisma generate",
+    "postinstall": "prisma generate",
     "prisma:migrate": "prisma db push",
     "seed": "prisma db seed"
   },
