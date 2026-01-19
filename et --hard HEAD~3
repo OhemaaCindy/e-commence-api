@@ -1,0 +1,30 @@
+[33me11de55[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m fix(prisma): remove custom client output to resolve initialization error
+[33m1605ef6[m fix: resolve Prisma client initialization issue
+[33m3fd5240[m fixed package.json conflict
+[33md802764[m fix: add npx prefix to Prisma commands and restore postinstall script
+[33m0730b08[m Merge pull request #1 from OhemaaCindy/bugFix
+[33m2a1bee3[m[33m ([m[1;31morigin/bugFix[m[33m, [m[1;32mbugFix[m[33m)[m fix: resolve TypeScript implicit any error in user service map function
+[33m47267d4[m fix: add postinstall script to generate Prisma client
+[33ma312339[m bug fix fr prisma client
+[33m525aa92[m added category images to seed
+[33mdaa3d35[m seed products
+[33m4f3d720[m worked on endpoint to get user orders
+[33m74d3bcc[m endpoint for address
+[33m948671a[m added order payment status and discount %
+[33m27ddc85[m endpoint to check authenticated user
+[33mf6af799[m worked on all  api endpoints
+[33me11de55[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m fix(prisma): remove custom client output to resolve initialization error
+[33m1605ef6[m fix: resolve Prisma client initialization issue
+[33m3fd5240[m fixed package.json conflict
+[33md802764[m fix: add npx prefix to Prisma commands and restore postinstall script
+[33m0730b08[m Merge pull request #1 from OhemaaCindy/bugFix
+[33m2a1bee3[m[33m ([m[1;31morigin/bugFix[m[33m, [m[1;32mbugFix[m[33m)[m fix: resolve TypeScript implicit any error in user service map function
+[33m47267d4[m fix: add postinstall script to generate Prisma client
+[33ma312339[m bug fix fr prisma client
+[33m525aa92[m added category images to seed
+[33mdaa3d35[m seed products
+[33m4f3d720[m worked on endpoint to get user orders
+[33m74d3bcc[m endpoint for address
+[33m948671a[m added order payment status and discount %
+[33m27ddc85[m endpoint to check authenticated user
+[33mf6af799[m worked on all  api endpoints

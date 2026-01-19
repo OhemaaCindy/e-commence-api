@@ -8,7 +8,7 @@
     "build": "rimraf dist && npm run typecheck && tsc",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit",
-    "prisma:generate": "npx prisma generate",
+    "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma db push",
     "seed": "prisma db seed"
   },
